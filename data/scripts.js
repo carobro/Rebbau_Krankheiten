@@ -3,8 +3,7 @@
 var request = new XMLHttpRequest()
 
 // Open a new connection, using the GET request on the URL endpoint
-request.open('GET', 'https://kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json', username='caro_bro', password='VP1_2021')
-
+request.open('GET', 'https://cors-anywhere.herokuapp.com/https://kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json', username='caro_bro', password='VP1_2021')
 
 request.onload = function() {
   // Begin accessing JSON data here
