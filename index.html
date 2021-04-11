@@ -2,47 +2,35 @@
 <html>
 
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Multiple layers</title>
+      <title>Kranheiten im Rebbau</title>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin
-        integrity="sha384-VzLXTJGPSyTLX6d96AxgkKvE/LRb7ECGyTxuwtpjHnVWVZs2gp5RDjeM/tgBnVdM">
+        integrity="sha384-VzLXTJGPSyTLX6d96AxgkKvE/LRb7ECGyTxuwtpjHnVWVZs2gp5RDjeM/tgBnVdM", >
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="icon" type="image/png" href="C:/Users/cbr/FHNW/VP1 Rebbauerfassung_M365 - General/Medien/Logo.png">
   <style>
-    html, body, #mapid { width: 800px; height: 600px; margin: 0; }
-	#root {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+    html, body, #mapid { width: 100%; height: 400px; margin: 0; }
+	
+	body {
+		font-family:arial, sans-serif;
+		}
 
-.container {
-  display: flex;
-  flex-wrap: wrap;
-}
+	
 
-.card {
-  margin: 1rem;
-  border: 1px solid gray;
-}
-
-@media screen and (min-width: 600px) {
-  .card {
-    flex: 1 1 calc(50% - 2rem);
-  }
-}
-
-@media screen and (min-width: 900px) {
-  .card {
-    flex: 1 1 calc(33% - 2rem);
-  }
-}
   </style>
   
-      <title>Kranheiten im Rebbau</title>
-
 </head>
+<h1>Herzlich Willkommen auf unserer Website "Krankheiten im Rebbau"</h1>
+	  <p>Die Daten basieren auf den, mit der App "KoboCollect", freiwillig gesammelten Informationen der WinzerInnen in ihren Reben"
 
 <body>
+
   <div id="mapid"></div>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin
           integrity="sha384-RFZC58YeKApoNsIbBxf4z6JJXmh+geBSgkCQXFyh+4tiFSJmJBt+2FbjxW7Ar16M"></script>
@@ -53,6 +41,11 @@
   
   <script src="data/scripts.js"></script>
   
+  
+<footer class="w3-panel w3-pale-green">
+  <p>Erstellt von Carolin Bronowicz</p>
+  <p>Bei Fragen, Anmerkungen und/oder Problemen bitte Mail an: <a href="carolin.bronowicz@students.fhnw.ch">carolin.bronowicz@students.fhnw.ch</a></p>
+</footer>
 </body>
 
 </html>
