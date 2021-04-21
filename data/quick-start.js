@@ -1,8 +1,9 @@
 'use strict';
 
-// Create map and attach id to element with id "mapid"
-var map = L.map('mapid').setView([46.947922, 7.444608], 8);
 
+
+// Create map and attach id to element with id "mapid"
+var map = L.map('mapid').setView([47.236, 8.1363], 8);
 
 var basemap = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2FybzEyMzQ1Njc4OTAiLCJhIjoiY2ppazRoOGo0MW50MDN1dDExeDZhZXYzZCJ9.wuiJwbnAVrKhQoVaLRx0ng', {
     maxZoom: 18,
@@ -13,6 +14,9 @@ var basemap = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{
     zoomOffset: -1
 }).addTo(map)
 
+var Temperature = L.tileLayer('https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=8cb6c86a2bb01b22e10bc471435a63c1');
+var Precipitation = L.tileLayer('https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=8cb6c86a2bb01b22e10bc471435a63c1');
+var Clouds = L.tileLayer('https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=8cb6c86a2bb01b22e10bc471435a63c1');
 
 var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     maxZoom: 20,
@@ -38,7 +42,7 @@ var osmlayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 //var mapLayer = L.tileLayer.swiss().addTo(map);
 
 // Center the map on Switzerland
-map.fitSwitzerland();
+//map.fitSwitzerland();
 
 
 var baseMaps = {
@@ -47,6 +51,12 @@ var baseMaps = {
     'Topography': topography,
     'OSM': osmlayer
 };
+var overlayMaps = {
+	'Temperature': Temperature,
+	'Precipitation': Precipitation,
+	'Clouds': Clouds
+};
+
 
 var popup = L.popup();
 
@@ -59,4 +69,7 @@ function onMapClick(e) {
 
 map.on('click', onMapClick);
 
-L.control.layers(baseMaps).addTo(map);
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+map.locate({setView: true, watch: true, maxZoom: 10});

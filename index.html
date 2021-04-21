@@ -16,20 +16,20 @@
 	   <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+	
       <style>
-	  #wrapper {
-    width: 100%;
-    overflow: hidden; /* add this to contain floated children; */
-	display: flex;
-}
 
-#weatherdata{
-overflow: hidden; /* if you don't want #second to wrap below #first */}
 
-         html, body, #mapid { width: 100% }
+       html, body, #mapid { width: 100%; height: 400px; margin: 0; }
          body {
          font-family:arial, sans-serif;
          }
+		 
+img{
+		 width: 600px;
+		 height:400px;
+		 }
+		 
 		 
 input[type="range"]{
     width: 50%;
@@ -47,14 +47,8 @@ input[type="range"]{
    </head>
    <body>
       <h1>Herzlich Willkommen auf unserer Website "Krankheiten im Rebbau"</h1>
-      <p> Die Daten basieren auf den, mit der App "KoboCollect", freiwillig gesammelten Informationen der WinzerInnen in ihren Reben"</p>
-<div id="wrapper">     
+      <p> Die Daten basieren auf den, mit der App "KoboCollect", freiwillig gesammelten Informationen der WinzerInnen in ihren Reben"</p>   
 	 <div id="mapid"></div>
-	        <div id="weatherdata">
-	  <img src="//my.meteoblue.com/visimage/meteogram_web?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Basel&iso2=ch&lat=47.558399&lon=7.573270&asl=279&tz=Europe%2FZurich&lang=de&sig=d86a55c0f1f11ecbd610f1ca7d7a3101" srcset="//my.meteoblue.com/visimage/meteogram_web_hd?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Basel&iso2=ch&lat=47.558399&lon=7.573270&asl=279&tz=Europe%2FZurich&lang=de&sig=7cf9738f65ead26937e6935f62b27ffd 1.4x" alt="Meteogram - 5 days - Basel">
-<a href="https://www.meteoblue.com/de/wetter/woche/basel_schweiz_2661604" target="_blank" style="display: block;">Wetter Basel - meteoblue</a>
-</div>
-</div>
 	  
 	  <div class="map-overlay top">
     <div class="map-overlay-inner">
@@ -62,8 +56,16 @@ input[type="range"]{
         <label id="month"></label>
         <input id="rangeSlider" type="range" min="0" max="50" step="1" value="0" oninput="changeData(this.value)">
     </div>
-	
-      <footer class="w3-panel w3-pale-green">
+<!--	<div id="weatherdata">
+			<img src="https://my.meteoblue.com/visimage/meteogram_web?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Basel&iso2=ch&lat=47.558399&lon=7.573270&asl=279&tz=Europe%2FZurich&lang=de&sig=d86a55c0f1f11ecbd610f1ca7d7a3101" srcset="//my.meteoblue.com/visimage/meteogram_web_hd?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Basel&iso2=ch&lat=47.558399&lon=7.573270&asl=279&tz=Europe%2FZurich&lang=de&sig=7cf9738f65ead26937e6935f62b27ffd 1.4x" alt="Meteogram - 5 days - Basel"></img>
+			<a href="https://www.meteoblue.com/de/wetter/woche/basel_schweiz_2661604">Wetter Basel - meteoblue</a>
+    </div> 
+
+<img alt="" role="presentation" src="https://map.search.ch/chmap.jpg?layer=sym&amp;l=512:7/22/33" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(67px, -57px, 0px);">
+
+<img class="leaflet-image-layer leaflet-zoom-animated" src="https://meteo.search.ch/images/cosmo/PREC1/1618923000.png" alt="" style="z-index: 1; opacity: 0.85; transform: translate3d(74px, 61px, 0px); width: 586px; height: 426px;">
+-->
+	  <footer class="w3-panel w3-pale-green">
          <p>Erstellt von Carolin Bronowicz</p>
          <p>Bei Fragen, Anmerkungen und/oder Problemen bitte Mail an: <a href="carolin.bronowicz@students.fhnw.ch">carolin.bronowicz@students.fhnw.ch</a></p>
       </footer>
@@ -76,5 +78,6 @@ input[type="range"]{
          integrity="sha384-euGDvW95PJJoBC7xefx6xWF1eZt1Y2HskqSURUUZgd+ND6QEVSt9VKPdzl82hDQq"></script>
       <script src="data/quick-start.js"></script>
       <div id="root"></div>
-      <script src="data/scripts.js"></script>
+      <script type="text/javascript" src="data/scripts.js"></script>
+	  <script type="text/javascript" src="data/weather_data.js"></script>
 </html>
