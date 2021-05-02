@@ -1,6 +1,9 @@
 ## Kranheiten im Rebbau
 # install.packages("jsonlite")
 
+setwd("C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten")
+rm(list=ls())
+
 library("jsonlite")
 # install.packages("gstat")
 library(gstat) # Use gstat's idw routine
@@ -57,7 +60,8 @@ niederschlag <- nieder_data_temp[-c(273,272,271),]
 names(niederschlag) <- c("Station", "Abk", "Niederschlag", "Datum", "lat", "lon", "Kanton")
 
 # --------------------------------------------------------------------------------
-border <- readOGR(dsn = "C:/Users/caro1/Downloads/swissBOUNDARIES3D/BOUNDARIES_2021_04/DATEN/swissBOUNDARIES3D/SHAPEFILE_LV95_LN02/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp", stringsAsFactors = F)
+## DataSource: https://cms.geo.admin.ch/ogd/topography/swissBOUNDARIES3D.zip
+border <- readOGR(dsn = "shapefile/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp", stringsAsFactors = F)
 #temp <- tempfile()
 #download.file("https://cms.geo.admin.ch/ogd/topography/swissBOUNDARIES3D.zip",temp)
 # data <- read.table(unz(temp, "file2f50559d39aa.dat"))
@@ -102,4 +106,4 @@ tm_shape(r.m) +
             title="Predicted precipitation \n(in mm)")+tm_legend(legend.outside=TRUE)
 
 
-writeRaster(r.m,'C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten/niederschlag.tif', overwrite=TRUE)
+writeRaster(r.m,'niederschlag.tif', overwrite=TRUE)
