@@ -3,7 +3,8 @@
 var request = new XMLHttpRequest()
 request.withCredetialts = true;
 // Open a new connection, using the GET request on the URL endpoint
-request.open('GET', 'https://cors-anywhere.herokuapp.com/https://kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json', user = 'caro_bro', password = 'VP1_2021')
+// Add User and password
+request.open('GET', 'https://cors-anywhere.herokuapp.com/https://kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json', user = 'xx', password = 'xx')
 request.setRequestHeader('Access-Control-Allow-Origin', 'https://kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json');
 
 request.onload = function() {
