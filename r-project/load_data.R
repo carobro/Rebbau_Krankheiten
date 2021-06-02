@@ -17,7 +17,7 @@ library(tmap)
 #1 Load all needed data
 kobodata <-
   jsonlite::fromJSON(
-    "https://caro_bro:VP1_2021@kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json"
+    "https://user:password@kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json"
   )
 head(kobodata)
 names(kobodata$results)
