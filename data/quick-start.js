@@ -5,7 +5,7 @@
 // Create map and attach id to element with id "mapid"
 var map = L.map('mapid').setView([47.236, 8.1363], 8);
 
-var basemap = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2FybzEyMzQ1Njc4OTAiLCJhIjoiY2ppazRoOGo0MW50MDN1dDExeDZhZXYzZCJ9.wuiJwbnAVrKhQoVaLRx0ng', {
+var basemap = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=//addyourMapboxToken//', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
         'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
