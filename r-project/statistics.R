@@ -4,6 +4,7 @@ library(ggplot2)
 library(ggthemes)
 setwd("C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten")
 
+## load data
 kobo <- read.csv("KoboData.csv")
 
 # limits=c("2","1","0.5")
@@ -16,6 +17,8 @@ Blatt <- table(kobo$befallBlatt)
 Menge <- table(kobo$befallmenge)
 Wtyp  <- table(kobo$weintyp)
 
+
+# Erstelle Barplots
 names(Krank) <- c("Botrytis", "Echter Mehltau", "Esca", "Falscher Mehltau", "Gar keine", "Kirschessigfliege", "Schwarzhilzkrankheit")
 barplot(Krank,las=2)
 names(Blatt) <- c("0% -2.5%", "2.5%-10%","25%-50%","50%-100%")
