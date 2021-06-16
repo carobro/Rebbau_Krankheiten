@@ -100,6 +100,7 @@ names(station_data) <- c("name", "values", "x", "ID", "lat", "lon")
 library(rgdal)
 library(tmap)
 
+##Quelle: https://mgimond.github.io/Spatial/interpolation-in-r.html
 P <- station_data
 coordinates(P) <- ~ lon + lat
 P$values[is.na(P$values)] <- 0
