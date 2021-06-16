@@ -8,16 +8,19 @@ setwd("C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten")
 rm(list = ls())
 
 
+## Lade erstelltes Shapefile
 layer <-
   readOGR("C:/Users/caro1/Downloads/Klus/Kluss177.shp", encoding = "UTF-8")
 layer$PolyID <- c(1:length(layer$id))
 
+## Extrahiere Lat und Lon aus den Daten und setzte die Projektion
 coords <- coordinates(layer)
 layer$lat <- as.numeric(coords[, 2])
 layer$lng <- as.numeric(coords[, 1])
 projection(layer) = "+init=epsg:4326"
 # spTransform(layer, "+init=epsg:4326")
 
+## Lade die gesammelten Informationen
 data <- read.csv("KoboData.csv")
 #kobo <- data[c(17,16, 2,3,4,7,12,13,14, 15)]
 kobo <- data[c(17, 16, 13, 1)]
@@ -25,6 +28,7 @@ coordinates(kobo) <- ~ lon + lat
 proj4string(kobo) <- proj4string(layer)
 
 
+## Prüfe welche Marker in einem Polygon sitzen um dem Polygon die Massnahme zu übergeben
 base <- data[c(17, 16, 13, 1)]
 inarea <- over(layer, kobo, returnList = FALSE)
 inarea$PolyID <- c(1:length(inarea$X))
