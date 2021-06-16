@@ -63,6 +63,7 @@ nieder_temp <- nieder_temp[1:7, ]
 station_name <- names(nieder_temp)
 dauerregen <- data.frame(matrix(ncol = 186, nrow = 1))
 
+## Calculate the number of rain-days in one week
 index = 0
 lauf = 1
 for (j in 1:length(nieder_temp)) {
