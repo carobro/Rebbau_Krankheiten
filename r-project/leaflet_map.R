@@ -13,6 +13,7 @@ pal <- colorNumeric(c("white", "blue", "red"), values(raster),
                     na.color = "transparent")
 
 
+# QUelle: https://github.com/rkaravia/Leaflet.TileLayer.Swiss
 crs <-  "L.CRS.EPSG2056"
 format <- "jpeg"
 layer <- "ch.swisstopo.swissimage"
