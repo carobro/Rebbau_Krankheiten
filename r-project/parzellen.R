@@ -8,6 +8,7 @@ rm(list=ls())
 layer <- readOGR("C:/Users/caro1/Downloads/Haegglingen/Gebiet_Haegglingen.shp")
 layer$PolyID <- c(1:length(layer$id))
 
+## Extrahiere LAT und LON und setzte das die Projektion
 coords <- coordinates(layer)
 layer$lat <- as.numeric(coords[,2])
 layer$lng <- as.numeric(coords[,1])
@@ -20,7 +21,7 @@ kobo <- data[c(17,16, 13, 1)]
 coordinates(kobo) <- ~ lon + lat
 proj4string(kobo) <- proj4string(layer)
 
-
+## Prüfe ob Marker in Polygon sitzt um Polygon dann die Massnahmen zu übergeben
 base <- data[c(17,16, 13, 1)]
 inarea <- over(layer,kobo, returnList = FALSE)
 inarea$PolyID <- c(1:length(inarea$X))
