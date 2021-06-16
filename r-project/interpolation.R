@@ -5,6 +5,7 @@ kobo <- read.csv("KoboData.csv")
 border <- readOGR(dsn = "shapefile/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp", stringsAsFactors = F)
 points <- cbind(kobo$lon, kobo$lat)
 
+## Quelle: https://mgimond.github.io/Spatial/interpolation-in-r.html
 
 
 P2 <- kobo
