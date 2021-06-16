@@ -103,6 +103,7 @@ border <-
   readOGR(dsn = "shapefile/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp", stringsAsFactors = F)
 
 # ---------------------------------------------------------------------------------
+#Quelle: https://mgimond.github.io/Spatial/interpolation-in-r.html
 P <- niederschlag
 coordinates(P) <- ~ lon + lat
 P$Niederschlag[is.na(P$Niederschlag)] <- 0
