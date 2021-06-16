@@ -1,3 +1,4 @@
+## DATEI WIRD NICHT VERWENDET
 rm(list = ls())
 setwd("C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten")
 
