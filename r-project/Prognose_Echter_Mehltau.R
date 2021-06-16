@@ -1,3 +1,4 @@
+## DATEI NICHT IN VERWENDUNG
 library(tidyverse)
 library(rvest)
 library("jsonlite")
