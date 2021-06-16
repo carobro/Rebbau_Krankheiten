@@ -1,9 +1,13 @@
+## load libraries
 library(raster)
 library(leaflet)
 library(rgdal)
 setwd("C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten")
 rm(list = ls())
 
+## Dieses Skript fasst alle Resultate der anderen Skripte zusammen. Es ist erst auszuführen, wenn alle anderen ausgeführt wurden
+
+## Lade alle Daten
 data <- read.csv("KoboData.csv")
 
 nied <- raster("niederschlag.tif")
@@ -24,7 +28,7 @@ data <- merge(data, infektion, by = "X")
 
 points <- cbind(data$lon, data$lat)
 
-
+## Kreiere Farbpaletten
 pal_prec <-
   colorBin(
     c("green", "yellow", "orange", "red"),
@@ -55,6 +59,7 @@ pal_haeg <-
 
 
 ################################################################
+## Lade die Bilder herunterr
 library("jsonlite")
 library(jpeg)
 #1 Load all needed data
@@ -80,7 +85,7 @@ for (i in 1:length(attach)){
   pic3[i] <- temp[3]
 }
 #################################
-
+## Erstelle die Leaflet Karte basierend auf allen Daten
 
 m <- leaflet() %>%
   addTiles(group = "Open Street Map") %>% 
