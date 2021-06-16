@@ -9,6 +9,10 @@ data <- read.csv("KoboData.csv")
 nied <- raster("niederschlag.tif")
 prec <- raster("precipitation.tif")
 
+border <-
+  readOGR(dsn = "shapefile/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp", stringsAsFactors = F)
+border <- spTransform(border, "+init=epsg:4326")
+
 infektion <- read.csv("infektion.csv")
 names(infektion) <- c("X", "Infektion")
 
@@ -85,7 +89,7 @@ m <- leaflet() %>%
   addProviderTiles("Esri.WorldImagery") %>%
   addLayersControl(
     baseGroups = c("Esri.WorldImagery","Open Street Map"),
-    overlayGroups = c("Infektionswahrscheinlichkeit", "Niederschlag (10 min)", "Messstandort", "Parzellen"),
+    overlayGroups = c("Infektionswahrscheinlichkeit", "Niederschlag (10 min)", "Aufnahmeorte", "Parzellen"),
     options = layersControlOptions(collapsed = FALSE)
   ) %>%
   addRasterImage(
@@ -145,6 +149,10 @@ m <- leaflet() %>%
                    "<strong> Parzellen ID: </strong>", haegglingen$PolyID),
     group = "Parzellen"
   ) %>%
+  addPolygons(
+    data=border,
+    weight=2,col = 'lightgrey', fillColor = 'transparent'
+  )%>%
   addMarkers(
     data = points,
     popup = paste0(
@@ -163,19 +171,11 @@ m <- leaflet() %>%
       "<br><img src = ", pic1, ">"
     ),
     clusterOptions = markerClusterOptions(showCoverageOnHover = FALSE),
-    group = "Messstandort"
+    group = "Aufnahmeorte"
   )%>%
   addEasyButton(easyButton(
     icon = "fa-crosshairs",
     title = "Zeige meinen Standort",
     onClick = JS("function(btn, map){ map.locate({setView: true}); }")
-  ))%>%
-htmlwidgets::onRender("
-    function(el, x) {
-      this.on('baselayerchange', function(e) {
-        e.layer.bringToBack();
-      })
-    }
-  ")
+  ))
 m %>% hideGroup("Niederschlag (10 min)")
-

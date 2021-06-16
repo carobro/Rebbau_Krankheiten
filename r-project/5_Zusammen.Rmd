@@ -1,0 +1,214 @@
+---
+title: "Krankheiten im Rebbau - Daten"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+---
+```{r setup, include=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
+library(raster)
+library(sp)
+library(rgdal)
+library(leaflet)
+library("jsonlite")
+library(jpeg)
+setwd("C:/Users/caro1/Documents/MobiGi/Rebbau_Krankheiten")
+rm(list = ls())
+
+data <- read.csv("KoboData.csv")
+
+nied <- raster("niederschlag.tif")
+prec <- raster("precipitation.tif")
+
+infektion <- read.csv("infektion.csv")
+names(infektion) <- c("X", "Infektion")
+border <-
+  readOGR(dsn = "shapefile/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp", stringsAsFactors = F)
+border <- spTransform(border, "+init=epsg:4326")
+
+haegglingen <- readOGR("Haegglingen/Haegglingen.shp", encoding = "UTF-8")
+
+klus <- readOGR("Klus/Klus.shp", encoding = "UTF-8")
+
+data <- merge(data, infektion, by = "X")
+
+points <- cbind(data$lon, data$lat)
+
+
+
+#1 Load all needed data
+kobodata <-
+  jsonlite::fromJSON(
+    "https://caro_bro:VP1_2021@kf.kobotoolbox.org/api/v2/assets/a4TGhiJNRfASUqYXknMQnk/data/?format=json"
+  )
+attach <- kobodata$results$`_attachments`
+
+pic1 <- array(1:length(attach))
+pic2 <- array(1:length(attach))
+pic3 <- array(1:length(attach))
+for (i in 1:length(attach)){
+  temp <- attach[[i]]$download_small_url
+  print(temp)
+  temp[is.na(temp)] <- 0
+  pic1[i] <- temp[1]
+  pic2[i] <- temp[2]
+  pic3[i] <- temp[3]
+}
+
+
+pal_prec <-
+  colorBin(
+    c("green", "yellow", "orange", "red"),
+    domain = values(prec),
+    bins = 4,
+    na.color = "transparent"
+  )
+
+
+pal_nied <- colorNumeric(c("white", "blue", "red"), values(nied),
+                         na.color = "transparent")
+
+pal_klus <-
+  colorFactor(
+    palette = c("red", "blue", "green"),
+    na.color = "transparent",
+    levels =
+      levels(klus$Kommentar)
+  )
+
+pal_haeg <-
+  colorFactor(
+    palette = c("red", "blue", "green"),
+    na.color = "transparent",
+    levels =
+      levels(haegglingen$kommenta_1)
+  )
+
+
+m <- leaflet(width='100%') %>%
+  addTiles(group = "Open Street Map") %>% 
+  # Add default OpenStreetMap map tiles
+  setView(lng = 8.3093072, lat = 47.0501682,  zoom = 7) %>%
+  addProviderTiles("Esri.WorldImagery") %>%
+  addLayersControl(
+    baseGroups = c("Esri.WorldImagery","Open Street Map"),
+    overlayGroups = c("Infektionswahrscheinlichkeit", "Niederschlag (10 min)", "Aufnahmeorte", "Parzellen"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addRasterImage(
+    prec,
+    colors = pal_prec,
+    opacity = 0.5,
+    project = FALSE,
+    group = "Infektionswahrscheinlichkeit"
+  ) %>%
+  addLegend(
+    color = c("green", "yellow", "orange", "red"),
+    labels = c("1-2 = gering", "3-4 = mittel", "5-6 = hoch", "> 7 = sehr hoch"),
+    title = "Infektionswahrscheinlichkeit <br> (Niederschlag letzte 7 Tage)",
+    group = "Infektionswahrscheinlichkeit"
+  ) %>%
+  addRasterImage(
+    nied,
+    colors = pal_nied,
+    opacity = 0.5,
+    project = FALSE,
+    group = "Niederschlag (10 min)"
+  ) %>%
+  addLegend(
+    pal = pal_nied,
+    values = values(nied),
+    title = "Niederschlag in mm  <br> (letzte 10 min.)",
+    group = "Niederschlag (10 min)"
+  ) %>%
+    addPolygons(
+    data=border,
+    weight=2,col = 'lightgrey', fillColor = 'transparent'
+  )%>%
+  addPolygons(
+    data = klus,
+    color = "black",
+    weight = 2,
+    opacity = 1.0,
+    fillOpacity = 0.8,
+    fillColor = ~ pal_klus(klus$Kommentar),
+    highlightOptions = highlightOptions(
+      color = "white",
+      weight = 2,
+      bringToFront = TRUE
+    ),
+    popup = paste0("<br>","<strong> Weintyp: </strong>", klus$Weintyp, 
+                   "<br>","<strong> Parzellen ID: </strong>", klus$PolyID),
+    group = "Parzellen"
+  ) %>%
+  addPolygons(
+    data = haegglingen,
+    color = "black",
+    weight = 2,
+    opacity = 1.0,
+    fillOpacity = 0.8,
+    fillColor = ~ pal_haeg(haegglingen$kommenta_1),
+    highlightOptions = highlightOptions(
+      color = "white",
+      weight = 2,
+      bringToFront = TRUE
+    ),
+    popup = paste0("<br>", "<strong> Strategiename: </strong>", haegglingen$kommenta_1, "<br>","<strong> Parzellen ID: </strong>", haegglingen$PolyID),
+    group = "Parzellen"
+  )%>%
+  addMarkers(
+    data = points,
+    popup = paste0(
+      "<strong> Weintyp: </strong>",
+      data$weintyp,
+      "<br><strong> Datum: </strong>",
+      data$newdate,
+      "<br><strong> Betrieb & Parzelle: </strong>",
+      data$betrieb,
+      ", ",
+      data$parzelle,
+      "<br><strong> Infektionsgefahr: </strong>",
+      data$Infektion,
+      "<br><strong> Gemeldete Krankheit: </strong>",
+      data$krankheit,
+      "<br><strong> Kommentar: </strong>",
+      data$kommentar,
+      "<br><img src = ", pic1, ">"
+    ),
+    clusterOptions = markerClusterOptions(showCoverageOnHover = FALSE),
+    group = "Aufnahmeorte"
+  )%>%
+  addEasyButton(easyButton(
+    icon = "fa-crosshairs",
+    title = "Zeige meinen Standort",
+    onClick = JS("function(btn, map){ map.locate({setView: true}); }")
+  ))%>%
+  hideGroup("Niederschlag (10 min)") 
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
+m
+```
+## _________________________________
+## Wilkommen auf unserer Website
+
+Diese Website basiert auf den gesammelten Informationen durch Winzer in ihren Reben aus der KoboCollect App. Hier können Sie die Informationen erforschen und neue Erkentnisse sammeln.
+
+## _________________________________
+## Erklärungen:
+
+### Infektionswahrscheinlichkeit
+Die Inferktionswahrscheinichkeitskarte wurde auf Basis der kummulierten Niederschlagsinformation der letzten 7 Tage erstellt. Die Daten werden durch eine hohe Anzahl an Klimastationen aus der gesamten Schweiz geliefert. Dies ist auch in der Legende wieder zu finden. Die Wahrscheinlichkeit berechnet sich daraus, wieviele Tage am Stück es geregnet hat. Um so höher diese Zahl ist, desto bessere Bedingungen für Infektionskrankheiten herrschen. Die Infektionswarscheinlichkeitskarte kann rechts in der Karte unter "Infektionswahrscheinlichkeit" ein- und ausgeschalten werden. 
+
+### Niederschlag (10 min)
+Die Karte Niederschlag (10 min) zeigt den Niederschlag der vergangenen 10 Minuten an. Anhand der Legende lassen sich die Werte ablesen. Die Niederschlagskarte kann rechts in der Karte unter "Niederschlag (10 min)" ein- und ausgeschalten werden. 
+
+### Aufnahmeorte
+Die Aufnahmeorte sind als blaue Marker auf der Karte dargestellt. Durch draufklicken auf einen Marker öffnet sich ein Popup mit Informationen, wie z.B. dem Weintyp und der Krankheit die aufgenommen wurden. Die Aufnahmeort lassen sich rechts in der Karte unter "Aufnahmeorte" ein- und ausschalten. 
+
+### Parzellen
+Falls Informationen zu Parzellen verfügbar sind, können diese hinzugefügt werden. So kann die Entwicklung/Veränderung einzelner Parzellen leichter verfolgt werden. Die Parzellen lassen sich rechts in der Karte unter "Parzellen" ein- und ausschalten. 
+
+## _________________________________
+Erstellt durch: Carolin Bronowicz carolin.bronowicz@students.fhnw.ch <br>
+Datum: `r Sys.Date()`

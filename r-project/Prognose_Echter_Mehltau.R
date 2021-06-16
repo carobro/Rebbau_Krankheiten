@@ -13,24 +13,53 @@ points <- cbind(stations$long_dec, stations$lat_dec)
 ## make list of stations ids for the url
 ids <- paste(stations$id, collapse = ",")
 
+
 ## generate dynamicaly the url to retrieve the  data from Agroscopes website
 url <-
   paste0(
-    "https://www.agrometeo.ch/de/meteorologie/data?stations=",
+    "https://www.agrometeo.ch/de/weinbau/echter-mehltau?stations=",
     ids,
-    "&sensors=6%3Asum&from=2021-04-29&to=2021-05-06&scale=day&groupBy=station"
+    "&from=",Sys.Date(),"&to=",Sys.Date()+5
   )
-#url <- "https://www.agrometeo.ch/de/meteorologie/data?stations=189&sensors=6%3Asum&from=2021-04-29&to=2021-05-06&scale=day&groupBy=station"
+
+url <- "https://www.agrometeo.ch/de/weinbau/echter-mehltau?stations=189,94,78,79,48&from=2021-05-24&to=2021-05-29"
+url <- "https://www.agrometeo.ch/de/weinbau/falscher-rebenmehltau?stations=189,72,94&from=2021-05-24&to=2021-05-29"
+download.file(url, "test.html")
+wiki_read1 <- readLines(url, encoding = "UTF-8")
+length((readHTMLTable(wiki_read1)))
+names(readHTMLTable(wiki_read1))
+readHTMLTable(wiki_read1)$"The table's caption\n"
 ## since we cant download the data directly in a file format we retrieve the content of
 ## the website and save them into a table
+data <- read_html(url)
+#df <- url %>%
+#  read_html() %>%
+#  html_nodes("div")
+
+df <- data %>% 
+  html_nodes(xpath='//*[@id="app"]/div/main/div/div/div[2]/div[2]/div')
+
+rank_data_html <- html_nodes(data,".entry") %>% html_nodes("div")
+
+rank_data <- html_text(rank_data_html)
+head(rank_data)
+
+df <- data %>% 
+  html_nodes(xpath='/html/body/div/div/div/div[1]/main/div/div/div[2]/div[2]/div/div[2]/div[2]/div[1]/div')
+
+require(rvest)
 df <- url %>%
   read_html() %>%
-  html_nodes("table") %>%
-  html_table(fill = T)
+  html_nodes("div") %>%
+  html_attr("class")
+
+
+
 
 tables <- data.frame()
 
 for (i in length(df)) {
+  print(i)
   temp <- df[[i]]
   tables <- bind_rows(tables, temp)
 }
@@ -152,3 +181,5 @@ tm_shape(r.m) +
 
 
 writeRaster(r.m, 'precipitation.tif', overwrite = TRUE)
+
+
